@@ -1,0 +1,24 @@
+ui_print("*******************************************");  
+ui_print("          FLASHING MINIMAL GAPPS ");  
+ui_print("*******************************************"); 
+
+ui_print(" Mounting Partitions...");
+run_program("/sbin/mount", "-t", "auto", "/data");
+delete_recursive("/data/dalvik-cache");
+run_program("/sbin/mount", "-t", "auto", "/cache");
+delete_recursive("/cache");
+
+ui_print(" Writing Data");
+run_program("/sbin/mount", "-t", "auto", "/system");
+package_extract_dir("system", "/system");
+
+ui_print(" Setting Permissions");
+set_metadata_recursive("/system/app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+set_metadata_recursive("/system/etc/permissions", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+set_metadata_recursive("/system/framework", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+set_metadata_recursive("/system/lib", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_library_file:s0");
+set_metadata_recursive("/system/priv-app", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0644, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");
+
+ui_print("*******************************************");  
+ui_print("          INSTALLATION COMPLETE ");  
+ui_print("*******************************************"); 
